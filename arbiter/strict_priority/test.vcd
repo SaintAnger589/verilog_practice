@@ -1,0 +1,202 @@
+$date
+	Wed Mar  3 00:00:15 2021
+$end
+$version
+	Icarus Verilog
+$end
+$timescale
+	1s
+$end
+$scope module test $end
+$var wire 4 ! grant [3:0] $end
+$var reg 1 " clk $end
+$var reg 4 # end_tran [3:0] $end
+$var reg 4 $ request [3:0] $end
+$var reg 1 % reset_n $end
+$scope module arbiter $end
+$var wire 1 " clk $end
+$var wire 4 & end_tran [3:0] $end
+$var wire 4 ' request [3:0] $end
+$var wire 1 % reset_n $end
+$var wire 1 ( any_request $end
+$var reg 4 ) grant [3:0] $end
+$var reg 4 * grant_next [3:0] $end
+$var reg 2 + next_state [1:0] $end
+$var reg 2 , state [1:0] $end
+$upscope $end
+$upscope $end
+$enddefinitions $end
+#0
+$dumpvars
+b1 ,
+b1 +
+b0 *
+b0 )
+x(
+bx '
+bx &
+0%
+bx $
+bx #
+0"
+b0 !
+$end
+#10
+1%
+1"
+#20
+b1 *
+b10 +
+1(
+b11 $
+b11 '
+0"
+#30
+b10 ,
+b1 !
+b1 )
+1"
+#40
+0"
+#50
+1"
+#60
+0"
+#70
+1"
+#80
+0"
+#90
+1"
+#100
+0"
+#110
+1"
+#120
+0"
+#130
+1"
+#140
+b10 *
+0"
+b10 $
+b10 '
+#150
+b10 !
+b10 )
+1"
+#160
+0"
+#170
+b0 !
+b0 )
+b1 ,
+b0 *
+b1 +
+1"
+0(
+b0 $
+b0 '
+#180
+0"
+#190
+1"
+#200
+0"
+#210
+1"
+#220
+0"
+#230
+1"
+#240
+0"
+#250
+1"
+#260
+0"
+#270
+1"
+#280
+0"
+#290
+1"
+#300
+0"
+#310
+1"
+#320
+0"
+#330
+1"
+#340
+0"
+#350
+1"
+#360
+0"
+#370
+1"
+#380
+0"
+#390
+1"
+#400
+0"
+#410
+1"
+#420
+0"
+#430
+1"
+#440
+0"
+#450
+1"
+#460
+0"
+#470
+1"
+#480
+0"
+#490
+1"
+#500
+0"
+#510
+1"
+#520
+0"
+#530
+1"
+#540
+0"
+#550
+1"
+#560
+0"
+#570
+1"
+#580
+0"
+#590
+1"
+#600
+0"
+#610
+1"
+#620
+0"
+#630
+1"
+#640
+0"
+#650
+1"
+#660
+0"
+#670
+1"
+#680
+0"
+#683
