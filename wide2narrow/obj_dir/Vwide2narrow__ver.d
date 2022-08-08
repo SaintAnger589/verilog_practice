@@ -1,0 +1,1 @@
+obj_dir/Vwide2narrow.cpp obj_dir/Vwide2narrow.h obj_dir/Vwide2narrow.mk obj_dir/Vwide2narrow__Slow.cpp obj_dir/Vwide2narrow__Syms.cpp obj_dir/Vwide2narrow__Syms.h obj_dir/Vwide2narrow__Trace.cpp obj_dir/Vwide2narrow__Trace__Slow.cpp obj_dir/Vwide2narrow__ver.d obj_dir/Vwide2narrow_classes.mk  : /usr/bin/verilator_bin /usr/bin/verilator_bin wide2narrow.sv 
