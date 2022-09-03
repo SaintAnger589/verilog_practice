@@ -1,0 +1,185 @@
+\hypertarget{r__type__instr_8h_source}{}\doxysection{r\+\_\+type\+\_\+instr.\+h}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{//R type instruction set}}
+\DoxyCodeLine{2 \textcolor{comment}{//determined by opcode = (33)base16 = (51)base10}}
+\DoxyCodeLine{3 \textcolor{comment}{//funct7 and funct3}}
+\DoxyCodeLine{4 \textcolor{comment}{//opcode/funct3/funct7}}
+\DoxyCodeLine{5 \textcolor{comment}{//add = 33/0/0 all base 16}}
+\DoxyCodeLine{6 \textcolor{comment}{//sub = 33/0/20 all base 16}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include <stdint.h>}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include <stdio.h>}}
+\DoxyCodeLine{9 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{10 \textcolor{preprocessor}{\#include "{}riscv\_instr\_helper.h"{}}}
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#include "{}testbench/ram.h"{}}}
+\DoxyCodeLine{12 }
+\DoxyCodeLine{13 }
+\DoxyCodeLine{14 \textcolor{keyword}{using namespace }std;}
+\DoxyCodeLine{15 }
+\DoxyCodeLine{16 \textcolor{preprocessor}{\#ifndef R\_TYPE\_INSTR}}
+\DoxyCodeLine{17 \textcolor{preprocessor}{\#define R\_TYPE\_INSTR}}
+\DoxyCodeLine{18 \textcolor{comment}{//class instr\_base;}}
+\DoxyCodeLine{19 \textcolor{keyword}{class }\mbox{\hyperlink{classr__type__instr}{r\_type\_instr}} \{}
+\DoxyCodeLine{20     int32\_t instruction;}
+\DoxyCodeLine{21 \textcolor{keyword}{public}:}
+\DoxyCodeLine{22   \textcolor{keywordtype}{int} opcode, funct3, funct7;}
+\DoxyCodeLine{23   \textcolor{keywordtype}{int} rs1\_loc, rs2\_loc, rd\_loc, rs1\_val, rs2\_val, rd\_val;}
+\DoxyCodeLine{24   \mbox{\hyperlink{classriscv__instr__helper}{riscv\_instr\_helper}} helper;}
+\DoxyCodeLine{25   \mbox{\hyperlink{classr__type__instr}{r\_type\_instr}}()\{}
+\DoxyCodeLine{26     cout<<\textcolor{stringliteral}{"{}Inside r type instruction\(\backslash\)n"{}};}
+\DoxyCodeLine{27     \textcolor{comment}{//this.instruction = instr;}}
+\DoxyCodeLine{28   \}}
+\DoxyCodeLine{29 }
+\DoxyCodeLine{30   \textcolor{keywordtype}{void} set\_instr(int32\_t instr)\{}
+\DoxyCodeLine{31     this-\/>instruction = instr;}
+\DoxyCodeLine{32     helper.set\_instr(instruction);}
+\DoxyCodeLine{33     \textcolor{comment}{//helper.set\_mem\_obj(mem);}}
+\DoxyCodeLine{34   \}}
+\DoxyCodeLine{35 }
+\DoxyCodeLine{36   \textcolor{keywordtype}{void} check\_r\_type\_instr(ram mem)\{}
+\DoxyCodeLine{37     \textcolor{comment}{//set helper instructions}}
+\DoxyCodeLine{38     \textcolor{comment}{//helper.set\_instr(instrucion);}}
+\DoxyCodeLine{39     helper.set\_mem\_obj(mem);}
+\DoxyCodeLine{40     opcode = helper.get\_opcode();}
+\DoxyCodeLine{41     cout<<\textcolor{stringliteral}{"{}r\_instr\_type::opcode = "{}}<< opcode<<\textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{42     \textcolor{keywordflow}{if} (opcode == 0x33)\{}
+\DoxyCodeLine{43       cout<<\textcolor{stringliteral}{"{}inside r\_type\_instruction opcode is of type r type\(\backslash\)n"{}};}
+\DoxyCodeLine{44       \textcolor{comment}{//R type instructions}}
+\DoxyCodeLine{45       funct3 = helper.get\_funct3();}
+\DoxyCodeLine{46       funct7 = helper.get\_funct7();}
+\DoxyCodeLine{47       rs1\_loc = helper.get\_rs1\_loc();}
+\DoxyCodeLine{48       rs2\_loc = helper.get\_rs2\_loc();}
+\DoxyCodeLine{49       rd\_loc = helper.get\_rd\_loc();}
+\DoxyCodeLine{50 }
+\DoxyCodeLine{51       rs1\_val = helper.get\_rs1\_val(rs1\_loc>>15);}
+\DoxyCodeLine{52       rs2\_val = helper.get\_rs2\_val(rs2\_loc>>20);}
+\DoxyCodeLine{53 }
+\DoxyCodeLine{54       cout<<\textcolor{stringliteral}{"{}r\_instr\_type:: rs1\_val = "{}}<<rs1\_val<<\textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{55       cout<<\textcolor{stringliteral}{"{}r\_instr\_type:: rs2\_val = "{}}<<rs2\_val<<\textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{56       \textcolor{comment}{//add}}
+\DoxyCodeLine{57       \textcolor{keywordflow}{if} (funct3 == 0 \&\& funct7 == 0)\{}
+\DoxyCodeLine{58         \textcolor{comment}{//add instructions}}
+\DoxyCodeLine{59         \textcolor{comment}{//rd\_val  = helper.get\_rs1\_val(rd\_loc);}}
+\DoxyCodeLine{60         rd\_val = rs1\_val + rs2\_val;}
+\DoxyCodeLine{61         \textcolor{comment}{//write the rd to memory}}
+\DoxyCodeLine{62         helper.set\_rd\_val(rd\_loc>>7, rd\_val);}
+\DoxyCodeLine{63       \}}
+\DoxyCodeLine{64       \textcolor{comment}{//sub}}
+\DoxyCodeLine{65       \textcolor{keywordflow}{if} (funct3 == 0 \&\& funct7 == 0x20)\{}
+\DoxyCodeLine{66         \textcolor{comment}{//sub instructions}}
+\DoxyCodeLine{67         \textcolor{comment}{//rd\_val  = helper.get\_rs1\_val(rd\_loc);}}
+\DoxyCodeLine{68         rd\_val = rs1\_val -\/ rs2\_val;}
+\DoxyCodeLine{69         \textcolor{comment}{//write the rd to memory}}
+\DoxyCodeLine{70         helper.set\_rd\_val(rd\_loc>>7, rd\_val);}
+\DoxyCodeLine{71       \}}
+\DoxyCodeLine{72       \textcolor{comment}{//SLL -\/ shift left logical}}
+\DoxyCodeLine{73       \textcolor{keywordflow}{if} (funct3 == 0x1 \&\& funct7 == 0x0)\{}
+\DoxyCodeLine{74         \textcolor{comment}{//sll instructions}}
+\DoxyCodeLine{75         \textcolor{comment}{//rd\_val  = helper.get\_rs1\_val(rd\_loc);}}
+\DoxyCodeLine{76         \textcolor{comment}{//for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit}}
+\DoxyCodeLine{77         \textcolor{comment}{//lower 5 bits only}}
+\DoxyCodeLine{78         rd\_val = rs1\_val << rs2\_val;}
+\DoxyCodeLine{79         \textcolor{comment}{//write the rd to memory}}
+\DoxyCodeLine{80         helper.set\_rd\_val(rd\_loc>>7, rd\_val);}
+\DoxyCodeLine{81       \}}
+\DoxyCodeLine{82 }
+\DoxyCodeLine{83       \textcolor{comment}{//SLT -\/ 1 if rs1 < rs2 else 0}}
+\DoxyCodeLine{84       \textcolor{keywordflow}{if} (funct3 == 0x2 \&\& funct7 == 0x0)\{}
+\DoxyCodeLine{85         \textcolor{comment}{//sll instructions}}
+\DoxyCodeLine{86         \textcolor{comment}{//rd\_val  = helper.get\_rs1\_val(rd\_loc);}}
+\DoxyCodeLine{87         \textcolor{comment}{//for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit}}
+\DoxyCodeLine{88         \textcolor{comment}{//lower 5 bits only}}
+\DoxyCodeLine{89         rd\_val = (rs1\_val < rs2\_val);}
+\DoxyCodeLine{90         \textcolor{comment}{//write the rd to memory}}
+\DoxyCodeLine{91         helper.set\_rd\_val(rd\_loc>>7, rd\_val);}
+\DoxyCodeLine{92       \}}
+\DoxyCodeLine{93 }
+\DoxyCodeLine{94       \textcolor{comment}{//SLTU -\/ slt unsigned}}
+\DoxyCodeLine{95       \textcolor{keywordflow}{if} (funct3 == 0x3 \&\& funct7 == 0x0)\{}
+\DoxyCodeLine{96         \textcolor{comment}{//sll instructions}}
+\DoxyCodeLine{97         \textcolor{comment}{//rd\_val  = helper.get\_rs1\_val(rd\_loc);}}
+\DoxyCodeLine{98         \textcolor{comment}{//for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit}}
+\DoxyCodeLine{99         \textcolor{comment}{//lower 5 bits only}}
+\DoxyCodeLine{100         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} rs1\_val\_unsigned = rs1\_val;}
+\DoxyCodeLine{101         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} rs2\_val\_unsigned = rs2\_val;}
+\DoxyCodeLine{102         rd\_val = (rs1\_val\_unsigned < rs2\_val\_unsigned);}
+\DoxyCodeLine{103         \textcolor{comment}{//write the rd to memory}}
+\DoxyCodeLine{104         helper.set\_rd\_val(rd\_loc>>7, rd\_val);}
+\DoxyCodeLine{105       \}}
+\DoxyCodeLine{106 }
+\DoxyCodeLine{107       \textcolor{comment}{//XOR}}
+\DoxyCodeLine{108       \textcolor{keywordflow}{if} (funct3 == 0x4 \&\& funct7 == 0x0)\{}
+\DoxyCodeLine{109         \textcolor{comment}{//xor instructions}}
+\DoxyCodeLine{110         \textcolor{comment}{//rd\_val  = helper.get\_rs1\_val(rd\_loc);}}
+\DoxyCodeLine{111         \textcolor{comment}{//for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit}}
+\DoxyCodeLine{112         \textcolor{comment}{//lower 5 bits only}}
+\DoxyCodeLine{113         \textcolor{comment}{//unsigned int rs1\_val\_unsigned = rs1\_val;}}
+\DoxyCodeLine{114         \textcolor{comment}{//unsigned int rs2\_val\_unsigned = rs2\_val;}}
+\DoxyCodeLine{115         rd\_val = (rs1\_val \string^ rs2\_val);}
+\DoxyCodeLine{116         \textcolor{comment}{//write the rd to memory}}
+\DoxyCodeLine{117         helper.set\_rd\_val(rd\_loc>>7, rd\_val);}
+\DoxyCodeLine{118       \}}
+\DoxyCodeLine{119       \textcolor{comment}{//SRL -\/ shift right logical}}
+\DoxyCodeLine{120       \textcolor{keywordflow}{if} (funct3 == 0x5 \&\& funct7 == 0x0)\{}
+\DoxyCodeLine{121         \textcolor{keywordtype}{int} rd\_val\_int;}
+\DoxyCodeLine{122         \textcolor{comment}{//srl instructions}}
+\DoxyCodeLine{123         \textcolor{comment}{//rd\_val  = helper.get\_rs1\_val(rd\_loc);}}
+\DoxyCodeLine{124         \textcolor{comment}{//for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit}}
+\DoxyCodeLine{125         \textcolor{comment}{//lower 5 bits only}}
+\DoxyCodeLine{126         \textcolor{comment}{//unsigned int rs1\_val\_unsigned = rs1\_val;}}
+\DoxyCodeLine{127         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} rs2\_val\_unsigned = rs2\_val;}
+\DoxyCodeLine{128         rd\_val\_int = (rs1\_val >> rs2\_val\_unsigned);}
+\DoxyCodeLine{129         \textcolor{keywordtype}{int} signed\_bit = (rs1\_val \& (1<<31)) >> 31;}
+\DoxyCodeLine{130         \textcolor{keywordtype}{int} signed\_extension  = 0;}
+\DoxyCodeLine{131         \textcolor{keywordflow}{for}(\textcolor{keywordtype}{int} i=rs2\_val\_unsigned;i<32;i++)\{}
+\DoxyCodeLine{132           rd\_val = rd\_val\_int | (signed\_bit<<i);}
+\DoxyCodeLine{133         \}}
+\DoxyCodeLine{134         \textcolor{comment}{//write the rd to memory}}
+\DoxyCodeLine{135         helper.set\_rd\_val(rd\_loc>>7, rd\_val);}
+\DoxyCodeLine{136       \}}
+\DoxyCodeLine{137 }
+\DoxyCodeLine{138       \textcolor{comment}{//SRA}}
+\DoxyCodeLine{139       \textcolor{keywordflow}{if} (funct3 == 0x5 \&\& funct7 == 0x0)\{}
+\DoxyCodeLine{140         \textcolor{comment}{//sra instructions}}
+\DoxyCodeLine{141         \textcolor{comment}{//rd\_val  = helper.get\_rs1\_val(rd\_loc);}}
+\DoxyCodeLine{142         \textcolor{comment}{//for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit}}
+\DoxyCodeLine{143         \textcolor{comment}{//lower 5 bits only}}
+\DoxyCodeLine{144         \textcolor{comment}{//unsigned int rs1\_val\_unsigned = rs1\_val;}}
+\DoxyCodeLine{145         \textcolor{keywordtype}{unsigned} \textcolor{keywordtype}{int} rs2\_val\_unsigned = rs2\_val;}
+\DoxyCodeLine{146         rd\_val = (rs1\_val >> rs2\_val\_unsigned);}
+\DoxyCodeLine{147         \textcolor{comment}{//write the rd to memory}}
+\DoxyCodeLine{148         helper.set\_rd\_val(rd\_loc>>7, rd\_val);}
+\DoxyCodeLine{149       \}}
+\DoxyCodeLine{150 }
+\DoxyCodeLine{151       \textcolor{comment}{//OR}}
+\DoxyCodeLine{152       \textcolor{keywordflow}{if} (funct3 == 0x6 \&\& funct7 == 0x0)\{}
+\DoxyCodeLine{153         \textcolor{comment}{//and instructions}}
+\DoxyCodeLine{154         \textcolor{comment}{//rd\_val  = helper.get\_rs1\_val(rd\_loc);}}
+\DoxyCodeLine{155         \textcolor{comment}{//for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit}}
+\DoxyCodeLine{156         \textcolor{comment}{//lower 5 bits only}}
+\DoxyCodeLine{157         \textcolor{comment}{//unsigned int rs1\_val\_unsigned = rs1\_val;}}
+\DoxyCodeLine{158         \textcolor{comment}{//unsigned int rs2\_val\_unsigned = rs2\_val;}}
+\DoxyCodeLine{159         rd\_val = (rs1\_val | rs2\_val);}
+\DoxyCodeLine{160         \textcolor{comment}{//write the rd to memory}}
+\DoxyCodeLine{161         helper.set\_rd\_val(rd\_loc>>7, rd\_val);}
+\DoxyCodeLine{162       \}}
+\DoxyCodeLine{163 }
+\DoxyCodeLine{164       \textcolor{comment}{//AND}}
+\DoxyCodeLine{165       \textcolor{keywordflow}{if} (funct3 == 0x7 \&\& funct7 == 0x0)\{}
+\DoxyCodeLine{166         \textcolor{comment}{//sra instructions}}
+\DoxyCodeLine{167         \textcolor{comment}{//rd\_val  = helper.get\_rs1\_val(rd\_loc);}}
+\DoxyCodeLine{168         \textcolor{comment}{//for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit}}
+\DoxyCodeLine{169         \textcolor{comment}{//lower 5 bits only}}
+\DoxyCodeLine{170         \textcolor{comment}{//unsigned int rs1\_val\_unsigned = rs1\_val;}}
+\DoxyCodeLine{171         \textcolor{comment}{//unsigned int rs2\_val\_unsigned = rs2\_val;}}
+\DoxyCodeLine{172         rd\_val = (rs1\_val \& rs2\_val);}
+\DoxyCodeLine{173         \textcolor{comment}{//write the rd to memory}}
+\DoxyCodeLine{174         helper.set\_rd\_val(rd\_loc>>7, rd\_val);}
+\DoxyCodeLine{175       \}}
+\DoxyCodeLine{176   \}}
+\DoxyCodeLine{177 \}}
+\DoxyCodeLine{178 }
+\DoxyCodeLine{179 \};}
+\DoxyCodeLine{180 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

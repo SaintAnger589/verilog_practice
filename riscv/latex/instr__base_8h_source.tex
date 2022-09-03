@@ -1,0 +1,47 @@
+\hypertarget{instr__base_8h_source}{}\doxysection{instr\+\_\+base.\+h}
+
+\begin{DoxyCode}{0}
+\DoxyCodeLine{1 \textcolor{comment}{// this class accepts instruction from the simulator}}
+\DoxyCodeLine{2 \textcolor{comment}{// and pass it on to the type of class}}
+\DoxyCodeLine{3 \textcolor{preprocessor}{\#include <iostream>}}
+\DoxyCodeLine{4 \textcolor{preprocessor}{\#include <stdint.h>}}
+\DoxyCodeLine{5 \textcolor{preprocessor}{\#include <stdio.h>}}
+\DoxyCodeLine{6 \textcolor{preprocessor}{\#include "{}./r\_type\_instr.h"{}}}
+\DoxyCodeLine{7 \textcolor{preprocessor}{\#include "{}riscv\_instr\_helper.h"{}}}
+\DoxyCodeLine{8 \textcolor{preprocessor}{\#include "{}testbench/ram.h"{}}}
+\DoxyCodeLine{9 }
+\DoxyCodeLine{10 }
+\DoxyCodeLine{11 \textcolor{preprocessor}{\#ifndef INSTR\_BASE}}
+\DoxyCodeLine{12 \textcolor{preprocessor}{\#define INSTR\_BASE}}
+\DoxyCodeLine{13 \textcolor{comment}{//class r\_type\_instr;}}
+\DoxyCodeLine{14 \textcolor{comment}{//class instr\_base;}}
+\DoxyCodeLine{15 \textcolor{keyword}{class }\mbox{\hyperlink{classinstr__base}{instr\_base}}\{}
+\DoxyCodeLine{16       int32\_t instruction;}
+\DoxyCodeLine{17 \textcolor{keyword}{public}:}
+\DoxyCodeLine{18 }
+\DoxyCodeLine{19   \mbox{\hyperlink{classr__type__instr}{r\_type\_instr}} rtype1;}
+\DoxyCodeLine{20   \textcolor{comment}{//riscv\_instr\_helper helper;}}
+\DoxyCodeLine{21 }
+\DoxyCodeLine{22   \mbox{\hyperlink{classinstr__base}{instr\_base}}(int32\_t instr) \{}
+\DoxyCodeLine{23     set\_instr(instr);}
+\DoxyCodeLine{24     rtype1.set\_instr(instruction);}
+\DoxyCodeLine{25     \textcolor{comment}{//helper.set\_instr(instr);}}
+\DoxyCodeLine{26   \}}
+\DoxyCodeLine{27 }
+\DoxyCodeLine{28   \textcolor{keywordtype}{void} set\_instr(\textcolor{keywordtype}{int} instr)\{}
+\DoxyCodeLine{29     this-\/>instruction = instr;}
+\DoxyCodeLine{30     cout<<\textcolor{stringliteral}{"{}base::instr = "{}}<<instr<<\textcolor{stringliteral}{"{}\(\backslash\)n"{}};}
+\DoxyCodeLine{31   \}}
+\DoxyCodeLine{32   \textcolor{comment}{//calling to see if it is R type instruction}}
+\DoxyCodeLine{33 }
+\DoxyCodeLine{34   \textcolor{comment}{//rtype.set\_instr(instruction);}}
+\DoxyCodeLine{35   \textcolor{comment}{//check\_r\_type\_instr()}}
+\DoxyCodeLine{36 }
+\DoxyCodeLine{37   \textcolor{keywordtype}{void} check\_r\_type( ram mem) \{}
+\DoxyCodeLine{38     rtype1.check\_r\_type\_instr(mem);}
+\DoxyCodeLine{39   \}}
+\DoxyCodeLine{40 \};}
+\DoxyCodeLine{41 }
+\DoxyCodeLine{42 \textcolor{preprocessor}{\#endif}}
+
+\end{DoxyCode}

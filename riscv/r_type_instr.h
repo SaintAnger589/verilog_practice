@@ -63,9 +63,113 @@ public:
       }
       //sub
       if (funct3 == 0 && funct7 == 0x20){
-        //add instructions
+        //sub instructions
         //rd_val  = helper.get_rs1_val(rd_loc);
         rd_val = rs1_val - rs2_val;
+        //write the rd to memory
+        helper.set_rd_val(rd_loc>>7, rd_val);
+      }
+      //SLL - shift left logical
+      if (funct3 == 0x1 && funct7 == 0x0){
+        //sll instructions
+        //rd_val  = helper.get_rs1_val(rd_loc);
+        //for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit
+        //lower 5 bits only
+        rd_val = rs1_val << rs2_val;
+        //write the rd to memory
+        helper.set_rd_val(rd_loc>>7, rd_val);
+      }
+
+      //SLT - 1 if rs1 < rs2 else 0
+      if (funct3 == 0x2 && funct7 == 0x0){
+        //sll instructions
+        //rd_val  = helper.get_rs1_val(rd_loc);
+        //for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit
+        //lower 5 bits only
+        rd_val = (rs1_val < rs2_val);
+        //write the rd to memory
+        helper.set_rd_val(rd_loc>>7, rd_val);
+      }
+
+      //SLTU - slt unsigned
+      if (funct3 == 0x3 && funct7 == 0x0){
+        //sll instructions
+        //rd_val  = helper.get_rs1_val(rd_loc);
+        //for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit
+        //lower 5 bits only
+        unsigned int rs1_val_unsigned = rs1_val;
+        unsigned int rs2_val_unsigned = rs2_val;
+        rd_val = (rs1_val_unsigned < rs2_val_unsigned);
+        //write the rd to memory
+        helper.set_rd_val(rd_loc>>7, rd_val);
+      }
+
+      //XOR
+      if (funct3 == 0x4 && funct7 == 0x0){
+        //xor instructions
+        //rd_val  = helper.get_rs1_val(rd_loc);
+        //for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit
+        //lower 5 bits only
+        //unsigned int rs1_val_unsigned = rs1_val;
+        //unsigned int rs2_val_unsigned = rs2_val;
+        rd_val = (rs1_val ^ rs2_val);
+        //write the rd to memory
+        helper.set_rd_val(rd_loc>>7, rd_val);
+      }
+      //SRL - shift right logical
+      if (funct3 == 0x5 && funct7 == 0x0){
+        int rd_val_int;
+        //srl instructions
+        //rd_val  = helper.get_rs1_val(rd_loc);
+        //for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit
+        //lower 5 bits only
+        //unsigned int rs1_val_unsigned = rs1_val;
+        unsigned int rs2_val_unsigned = rs2_val;
+        rd_val_int = (rs1_val >> rs2_val_unsigned);
+        int signed_bit = (rs1_val & (1<<31)) >> 31;
+        int signed_extension  = 0;
+        for(int i=rs2_val_unsigned;i<32;i++){
+          rd_val = rd_val_int | (signed_bit<<i);
+        }
+        //write the rd to memory
+        helper.set_rd_val(rd_loc>>7, rd_val);
+      }
+
+      //SRA
+      if (funct3 == 0x5 && funct7 == 0x0){
+        //sra instructions
+        //rd_val  = helper.get_rs1_val(rd_loc);
+        //for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit
+        //lower 5 bits only
+        //unsigned int rs1_val_unsigned = rs1_val;
+        unsigned int rs2_val_unsigned = rs2_val;
+        rd_val = (rs1_val >> rs2_val_unsigned);
+        //write the rd to memory
+        helper.set_rd_val(rd_loc>>7, rd_val);
+      }
+
+      //OR
+      if (funct3 == 0x6 && funct7 == 0x0){
+        //and instructions
+        //rd_val  = helper.get_rs1_val(rd_loc);
+        //for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit
+        //lower 5 bits only
+        //unsigned int rs1_val_unsigned = rs1_val;
+        //unsigned int rs2_val_unsigned = rs2_val;
+        rd_val = (rs1_val | rs2_val);
+        //write the rd to memory
+        helper.set_rd_val(rd_loc>>7, rd_val);
+      }
+
+      //AND
+      if (funct3 == 0x7 && funct7 == 0x0){
+        //sra instructions
+        //rd_val  = helper.get_rs1_val(rd_loc);
+        //for a 32 bits rs2 the whole rs2 can be taken, however for 64 bit
+        //lower 5 bits only
+        //unsigned int rs1_val_unsigned = rs1_val;
+        //unsigned int rs2_val_unsigned = rs2_val;
+        rd_val = (rs1_val & rs2_val);
         //write the rd to memory
         helper.set_rd_val(rd_loc>>7, rd_val);
       }
