@@ -112,8 +112,7 @@ void check_i_type_instr(ram mem){
   }
 
     }
-  }
-}
+  }//check_i_type_instr
 
 
 };
