@@ -20,7 +20,7 @@ class i_type_instr {
 public:
 int opcode, funct3, funct7;
 int rs1_loc, rd_loc, rs1_val, rd_val;
-int imm, imm_27_32,imm_20_24;
+int imm, imm_27_32,imm_20_24, imm_20_26;
 riscv_instr_helper helper;
 i_type_instr(){
   cout<<"Inside I type instruction\n";
@@ -111,6 +111,102 @@ void check_i_type_instr(ram mem){
       helper.set_rd_val(rd_loc>>7, rd_val);
   }
 
+    }
+
+    //load instructions
+    if (opcode == 0x3) {
+      int i, rd_val_int;
+      funct3 = helper.get_funct3();
+      rs1_loc = helper.get_rs1_loc();
+      rd_loc = helper.get_rd_loc();
+      rs1_val = helper.get_rs1_val(rs1_loc>>15);
+      //LB
+      if (funct3 == 0x0){
+        //load the 8 bit value from the memory and sign extends
+        for(i=20;i<32;i++){
+          imm = imm + (instruction & (1<<i));
+        }
+        int addr = rd1 + imm;
+        //load the mem value
+        rd_val_int = mem[addr];
+        std::bitset<32> rd_bits(rd_val);
+        //sign extends
+        for(i=8;i<32;i++){
+          rd_bits[i] = rd_bits[i] | rd_bits[31];
+        }
+        //convert to int
+        rd_val =  (int)(rd_bits.to_ulong());
+        helper.set_rd_val(rd_loc>>7, rd_val);
+      }
+      //LH
+      if (funct3 == 0x1){
+        //load the 8 bit value from the memory and sign extends
+        for(i=20;i<32;i++){
+          imm = imm + (instruction & (1<<i));
+        }
+        int addr = rd1 + imm;
+        //load the mem value
+        rd_val_int = mem[addr];
+        std::bitset<32> rd_bits(rd_val);
+        //sign extends
+        for(i=16;i<32;i++){
+          rd_bits[i] = rd_bits[i] | rd_bits[31];
+        }
+        //convert to int
+        rd_val =  (int)(rd_bits.to_ulong());
+        helper.set_rd_val(rd_loc>>7, rd_val);
+      }
+
+      //LW
+      if (funct3 == 0x2){
+        //load the 8 bit value from the memory and sign extends
+        for(i=20;i<32;i++){
+          imm = imm + (instruction & (1<<i));
+        }
+        int addr = rd1 + imm;
+        //load the mem value
+        rd_val = mem[addr];
+        helper.set_rd_val(rd_loc>>7, rd_val);
+        //convert to int
+        //rd_val =  (int)(rd_bits.to_ulong());
+      }
+
+      //LBU
+      //load 8 bit values and zero extends this to XLEN
+      if (funct3 == 0x4){
+        //load the 8 bit value from the memory and sign extends
+        for(i=20;i<32;i++){
+          imm = imm + (instruction & (1<<i));
+        }
+        int addr = rd1 + imm;
+        //load the mem value
+        rd_val_int = mem[addr];
+        //take out 8 bits
+        int zero_extend = 8b1111_1111;
+        rd_val = rd_val_int & zero_extend;
+
+        helper.set_rd_val(rd_loc>>7, rd_val);
+        //convert to int
+        //rd_val =  (int)(rd_bits.to_ulong());
+      }
+
+      //LHU
+      if (funct3 == 0x5){
+        //load the 8 bit value from the memory and sign extends
+        for(i=20;i<32;i++){
+          imm = imm + (instruction & (1<<i));
+        }
+        int addr = rd1 + imm;
+        //load the mem value
+        rd_val_int = mem[addr];
+        //take out 8 bits
+        int zero_extend = 16b1111_1111_1111_1111;
+        rd_val = rd_val_int & zero_extend;
+
+        helper.set_rd_val(rd_loc>>7, rd_val);
+        //convert to int
+        //rd_val =  (int)(rd_bits.to_ulong());
+      }
     }
   }//check_i_type_instr
 
