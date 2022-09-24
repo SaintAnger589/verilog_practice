@@ -1,13 +1,14 @@
 module divide_5(input clk,
 	            output clk_out);
-    
+
     wire d2,d1,d0;
     reg q2,q1,q0,q2temp;
+		wire q2bar, q1bar, q0bar;
 
     initial begin
         q2 = 0;
         q1 = 0;
-        q0 = 0;	
+        q0 = 0;
     end
 
     assign q2bar = ~q2;
@@ -21,11 +22,11 @@ module divide_5(input clk,
 
     //q0
     always @(posedge clk) begin
-        q0 <= d0;        	
+        q0 <= d0;
         q1 <= d1;
         q2 <= d2;
     end
-    
+
     always @(negedge clk) begin
     	q2temp <= q1;
     end
